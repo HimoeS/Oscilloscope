@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ESP32 Bluetooth</string>
+    <string name="timebase_ms">%s ms</string>
+    <string name="timebase_s">%s s</string>
+</resources>
