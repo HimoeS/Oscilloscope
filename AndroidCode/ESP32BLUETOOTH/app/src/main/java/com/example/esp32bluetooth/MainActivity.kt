@@ -23,7 +23,6 @@ import android.os.ParcelUuid
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -36,7 +35,6 @@ import com.jjoe64.graphview.series.LineGraphSeries
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.UUID
-import kotlin.math.abs
 
 
 class MainActivity : AppCompatActivity() {
@@ -161,7 +159,7 @@ class MainActivity : AppCompatActivity() {
 
         val staticLabelsFormatter = StaticLabelsFormatter(graph)
         staticLabelsFormatter.setHorizontalLabels(arrayOf("", "", "", "", ""))
-        staticLabelsFormatter.setVerticalLabels(arrayOf("", "", "", "", ""))
+//        staticLabelsFormatter.setVerticalLabels(arrayOf("", "", "", "", ""))
         graph.gridLabelRenderer.labelFormatter = staticLabelsFormatter
 
         setupButton()
