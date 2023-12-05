@@ -2,6 +2,7 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include <esp_adc_cal.h>
+#include <driver/adc.h>
 
 // Địa chỉ UUID dịch vụ
 #define SERVICE_UUID "000000ff-0000-1000-8000-00805f9b34fb"
@@ -19,6 +20,8 @@ float squareFrequency = 1.0;   // Tần số của xung vuông (Hz)
 // Chân kết nối
 int sinePin = 25;
 int squarePin = 26;
+
+double voltage = 0;
 
 BLEServer* pServer;
 BLEService* pService;
@@ -42,6 +45,9 @@ class MyServerCallbacks: public BLEServerCallbacks {
 
 void setup() {
   Serial.begin(115200);
+
+  adc1_config_width(ADC_WIDTH_BIT_12);
+  adc1_config_channel_atten(ADC1_CHANNEL_7,ADC_ATTEN_DB_0);
 
   pinMode(sinePin, OUTPUT);
   pinMode(squarePin, OUTPUT);
@@ -89,12 +95,18 @@ void loop() {
   Serial.print('\t');  // Tab để phân tách giữa sóng sine và xung vuông
   Serial.print(squareValue);  // In giá trị xung vuông
 
-  double sensorValue = analogReadAdjusted(sensorPin);
+  //double sensorValue = analogReadAdjusted(sensorPin);
+
+  for (int i=0;i<1000;i++)
+    voltage += (adc1_get_raw(ADC1_CHANNEL_7)*3.3)/4096.0;
+  voltage /= 1000;
+  double sensorValue = voltage;
+
   if (deviceConnected) {
     // Gửi dữ liệu khi có kết nối Bluetooth
     uint8_t byteArray[sizeof(double)];
     memcpy(byteArray, &sensorValue, sizeof(double));
-    sensorValue = (sensorValue / 4096) * 3.3;
+    //sensorValue = (sensorValue / 4096) * 3.3;
     pCharacteristic->setValue((uint8_t*)&sensorValue, sizeof(sensorValue));
     Serial.print('\t');
     Serial.println(sensorValue);
